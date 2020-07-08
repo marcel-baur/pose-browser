@@ -2,125 +2,135 @@
 
     <!--<mat-card fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="10px">-->
 
-        <div fxLayout="row wrap" fxLayoutGap="10px" >
-            <!-- me -->
-            <div class="videoContainer">
-                <video #video
-                       [width]="width"
-                       [height]="height"
-                       autoplay
-                       muted
-                       (loadeddata)="onLoadedData()"
-                       [hidden]="!webcamEnabled">
-                </video>
-                <pose-visualizer #visualizer class="videoOverlay">
-                </pose-visualizer>
-            </div>
-        </div>
-
-    <div fxLayout="row wrap" fxLayoutGap="10px" >
-            <!-- the other guy -->
-            <div class="receiverContainer">
-                <pose-visualizer #incomingVisualizer style="position:absolute;">
-                </pose-visualizer>
-            </div>
-        </div>
-
-        <!-- buttons -->
-        <div fxLayout="row wrap" fxLayoutGap="10px">
-
-            <div fxLayout="row wrap" fxLayoutGap="10px">
-                <button mat-icon-button
-                        matTooltip="Webcam"
-                        (click)="webcamEnabled ? stopWebcam() : startWebcam()">
-                    <mat-icon>{{webcamEnabled ? 'videocam_off' : 'videocam'}}</mat-icon>
-                </button>
-
-                <button mat-icon-button
-                        matTooltip="PoseNet"
-                        [disabled]="!webcamRunning"
-                        (click)="poseNetRunning ? stopPoseNet() : startPoseNet()">
-                    <mat-icon>{{poseNetRunning ? 'cloud' : 'cloud_queue'}}</mat-icon>
-                </button>
-
-                <button mat-icon-button
-                        matTooltip="Recording"
-                        [disabled]="!poseNetRunning"
-                        (click)="poseRecording ? stopRecording() : startRecording()">
-                    <mat-icon>{{poseRecording ? 'stop' : 'radio_button_checked'}}</mat-icon>
-                </button>
-
-                <!--
-                <button mat-button fxFlex
-                        matTooltip="PoseChat"
-                        (click)="togglePoseChat()">
-                    <mat-icon>{{posechatClientService.isConnected ? 'chat_bubble' : 'chat_bubble_outline'}}</mat-icon>
-                </button>-->
-            </div>
-        </div>
-
-        <!-- connect to URL -->
-        <div fxLayout="row wrap" fxLayoutGap="10px" style="font-size: 12px">
-            <mat-form-field appearance="outline" >
-                <mat-label>Pose-Chat Server</mat-label>
-                <input matInput
-                       [value]="posechatClientService.url"
-                       (input)="posechatClientService.url = $event.target.value"
-                       [disabled]="posechatClientService.isConnected">
-            </mat-form-field>
-
-            <button mat-button fxFlex style="height: 48px;"
-                    matTooltip="PoseChat"
-                    (click)="togglePoseChat()">
-                {{posechatClientService.isConnected ? 'Disconnect' : 'Connect'}}
-            </button>
-        </div>
-
-        <!-- sending -->
-        <div fxLayout="row wrap" fxLayoutGap="10px" style="font-size: 12px">
-            <mat-form-field appearance="outline" >
-                <mat-label>Pose-Chat Namespace</mat-label>
-                <input matInput
-                       [value]="posechatClientService.namespace"
-                       (input)="posechatClientService.namespace = $event.target.value"
-                       [disabled]="!posechatClientService.isConnected">
-            </mat-form-field>
+    <!-- me -->
+    <div fxLayout="row wrap" fxLayoutGap="10px">
+        <div class="videoContainer">
+            <video #video
+                   [width]="width"
+                   [height]="height"
+                   autoplay
+                   muted
+                   (loadeddata)="onLoadedData()"
+                   [hidden]="!webcamEnabled && showWebcamImage">
+            </video>
+            <pose-visualizer #visualizer class="videoOverlay">
+            </pose-visualizer>
             <button mat-icon-button
                     matTooltip="Sending"
                     [disabled]="!posechatClientService.isConnected"
                     (click)="posechatClientService.toggleSending()">
-                <mat-icon>{{posechatClientService.isSending ? 'stop_screen_share' : 'screen_share'}}</mat-icon>
+                <mat-icon>{{posechatClientService.isSending ? 'screen_share' : 'stop_screen_share'}}</mat-icon>
             </button>
+        </div>
+    </div>
+
+    <!-- the other guy -->
+    <div fxLayout="row wrap" fxLayoutGap="10px">
+        <div class="receiverContainer">
+            <pose-visualizer #receiverVisualizer style="position:absolute;">
+            </pose-visualizer>
             <button mat-icon-button
                     matTooltip="Receive"
                     [disabled]="!posechatClientService.isConnected"
                     (click)="posechatClientService.toggleReceiving()">
-                <mat-icon style="transform: scaleX(-1);">{{posechatClientService.isReceiving ? 'stop_screen_share' : 'screen_share'}}</mat-icon>
+                <mat-icon
+                    style="transform: scaleX(-1);">{{posechatClientService.isReceiving ? 'screen_share' : 'stop_screen_share'}}</mat-icon>
             </button>
         </div>
+    </div>
 
 
-        <!-- info -->
-        <div style="width:320px;">
-            <p class="mat-caption">
-                {{webcamEnabled ? 'Cam on' : 'Cam off'}},
-                {{poseNetRunning ? 'PoseNet on' : 'PoseNet off'}},
-                {{poseRecording ? 'Recording on' : 'Recording off'}},
-                {{posechatClientService.isConnected ? "PoseChat on" : "PoseChat off"}}
-            </p>
-            <p class="mat-caption">
-                This is a test application for internal use.
-                The current version does not store or send any personal data on our server.
-                Data is only stored locally on your device.
-            </p>
+    <!-- core controls -->
+    <div fxLayout="row wrap" fxLayoutGap="10px">
+
+        <div fxLayout="row wrap" fxLayoutGap="10px">
+            <button mat-icon-button
+                    matTooltip="Webcam"
+                    (click)="webcamEnabled ? stopWebcam() : startWebcam()">
+                <mat-icon>{{webcamEnabled ? 'videocam' : 'videocam_off'}}</mat-icon>
+            </button>
+
+            <button mat-icon-button
+                    matTooltip="PoseNet"
+                    [disabled]="!webcamRunning"
+                    (click)="poseNetRunning ? stopPoseNet() : startPoseNet()">
+                <mat-icon>{{poseNetRunning ? 'cloud' : 'cloud_queue'}}</mat-icon>
+            </button>
+
+            <button mat-icon-button
+                    matTooltip="Recording"
+                    [disabled]="!poseNetRunning"
+                    (click)="poseRecording ? stopRecording() : startRecording()">
+                <mat-icon>{{poseRecording ? 'radio_button_checked' : 'radio_button_unchecked'}}</mat-icon>
+            </button>
         </div>
+    </div>
 
-        <!-- p -->
-        <div>
-            <p class="mat-caption">
-                {{lastPoseStr}}
-            </p>
-        </div>
-   <!--</mat-card>-->
+    <!-- connect to URL -->
+    <div fxLayout="row wrap" fxLayoutGap="10px" style="font-size: 12px">
+        <mat-form-field appearance="outline">
+            <mat-label>Pose-Chat Server</mat-label>
+            <input matInput
+                   [value]="posechatClientService.url"
+                   (input)="posechatClientService.url = $event.target.value"
+                   [disabled]="posechatClientService.isConnected">
+        </mat-form-field>
+
+        <button mat-button fxFlex style="height: 48px;"
+                matTooltip="PoseChat"
+                (click)="togglePoseChat()">
+            {{posechatClientService.isConnected ? 'Disconnect' : 'Connect'}}
+        </button>
+    </div>
+
+    <!-- sending -->
+    <!--
+    <div fxLayout="row wrap" fxLayoutGap="10px" style="font-size: 12px">
+        <mat-form-field appearance="outline">
+            <mat-label>Pose-Chat Namespace</mat-label>
+            <input matInput
+                   [value]="posechatClientService.namespace"
+                   (input)="posechatClientService.namespace = $event.target.value"
+                   [disabled]="!posechatClientService.isConnected">
+        </mat-form-field>
+        <button mat-icon-button
+                matTooltip="Sending"
+                [disabled]="!posechatClientService.isConnected"
+                (click)="posechatClientService.toggleSending()">
+            <mat-icon>{{posechatClientService.isSending ? 'screen_share' : 'stop_screen_share'}}</mat-icon>
+        </button>
+        <button mat-icon-button
+                matTooltip="Receive"
+                [disabled]="!posechatClientService.isConnected"
+                (click)="posechatClientService.toggleReceiving()">
+            <mat-icon
+                style="transform: scaleX(-1);">{{posechatClientService.isReceiving ? 'screen_share' : 'stop_screen_share'}}</mat-icon>
+        </button>
+    </div>
+        -->
+
+
+    <!-- info -->
+    <div style="width:320px;">
+        <p class="mat-caption">
+            {{webcamEnabled ? 'Cam on' : 'Cam off'}},
+            {{poseNetRunning ? 'PoseNet on' : 'PoseNet off'}},
+            {{poseRecording ? 'Recording on' : 'Recording off'}},
+            {{posechatClientService.isConnected ? "PoseChat on" : "PoseChat off"}}
+        </p>
+        <p class="mat-caption">
+            This is a test application for internal use.
+            The current version does not store or send any personal data on our server.
+            Data is only stored locally on your device.
+        </p>
+    </div>
+
+    <!-- p -->
+    <div>
+        <p class="mat-caption">
+            {{lastPoseStr}}
+        </p>
+    </div>
+    <!--</mat-card>-->
 
 </div>

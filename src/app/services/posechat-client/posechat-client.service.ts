@@ -1,25 +1,26 @@
 import { Injectable } from '@angular/core';
 import * as io from 'socket.io-client';
+import {Observable, Subject} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
 })
 export class PosechatClientService {
-    public url = 'https://posechat-server.herokuapp.com/';
+    public url = 'http://localhost:3000';
     private socket;
     public isConnected = false;
 
     // send posenet data
     private sendTimeBuf = 0;
     private sendRequestId;
-    public sendInterval = 100;   // ms
+    public sendInterval = 33;   // ms
     public isSending = false;
     public poseInput;
     public poseInputBuf;
     public namespace = "ladida";
-
     public isReceiving = false;
-    public receivedPose;
+    public subReceiverState = new Subject<boolean>();
+    public subReceivedPose = new Subject<JSON>();
 
 
     constructor() {
@@ -63,10 +64,11 @@ export class PosechatClientService {
             });
 
             this.socket.on('pose-data', msg => {
-                console.log("message: " + msg);
-                //this.receivedPose =
+                if(this.isReceiving) {
+                    //console.log("message: " + msg);
+                    this.subReceivedPose.next(msg);
+                }
             })
-
 
 
 
@@ -120,13 +122,12 @@ export class PosechatClientService {
             if(!this.poseInputBuf || (this.poseInput.timestamp != this.poseInputBuf.timestamp)) {
                 //console.log("pose-data: " + this.poseInput.timestamp);
                 let json = this.poseInput;
-                //json.senderId = this.socket.id;
-                let jsonStr = JSON.stringify(json);
+                //let jsonStr = JSON.stringify(json);
 
                 // TODO: send to all bois in namespace (except sender)
                 //this.socket.emit("pose-data", jsonStr);
                 // for now... broadcast
-                this.socket.emit('pose-data', jsonStr);
+                this.socket.emit('pose-data', json);
             }
             this.poseInputBuf = this.poseInput;
         }
@@ -147,11 +148,12 @@ export class PosechatClientService {
 
     public startReceiving(){
         this.isReceiving = true;
+        this.subReceiverState.next(true);
     }
 
     public stopReceiving(){
         this.isReceiving = false;
+        this.subReceiverState.next(false);
     }
-
 
 }

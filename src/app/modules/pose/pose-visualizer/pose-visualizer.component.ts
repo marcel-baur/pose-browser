@@ -61,7 +61,14 @@ export class PoseVisualizerComponent implements OnInit, AfterViewInit {
 
     private draw(pose) {
         this.ctx.clearRect(0, 0, this.width, this.height);
+
+
         if (pose) {
+            // bg
+            this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+            this.ctx.fillRect(0, 0, this.width, this.height);
+
+            // avatar
             this.ctx.fillStyle = '#ffffff';
             this.ctx.strokeStyle = '#ffffff';
             this.ctx.setLineDash([4, 4]);
@@ -81,6 +88,7 @@ export class PoseVisualizerComponent implements OnInit, AfterViewInit {
             const rightEye = pose.keypoints[2];
             if(nose.score > .5 && leftEye.score > .5 && rightEye.score > .5){
 
+                /*
                 // head rotation
                 const headRotY = Math.atan2(leftEye.position.y - rightEye.position.y, leftEye.position.x - rightEye.position.x);
                 //const headRotX = Math.atan2(leftEye.position.y - rightEye.position.y, leftEye.position.x - rightEye.position.x);
@@ -89,6 +97,7 @@ export class PoseVisualizerComponent implements OnInit, AfterViewInit {
                 this.ctx.beginPath();
                 this.ctx.ellipse(nose.position.x, nose.position.y, 40, 50, headRotY, 0, 2 * Math.PI);
                 this.ctx.stroke();
+                *()
 
                 /*
                 this.ctx.beginPath();

@@ -14,9 +14,10 @@ export class PoseRecorderComponent implements OnInit, OnDestroy, AfterViewInit{
 
     @ViewChild('video', {static: true}) public cameraElement: ElementRef<HTMLVideoElement>;
     @ViewChild('visualizer', {static: true}) visualizer: PoseVisualizerComponent;
-    @ViewChild('incomingVisualizer', {static: true}) incomingVisualizer: PoseVisualizerComponent;
+    @ViewChild('receiverVisualizer', {static: true}) receiverVisualizer: PoseVisualizerComponent;
     @Input() public width: number = 320;
     @Input() public height: number = 240;
+    @Input() public showWebcamImage: boolean = true;
     private requestId;
     public webcamEnabled: boolean = false;
     public webcamRunning: boolean = false;
@@ -33,6 +34,20 @@ export class PoseRecorderComponent implements OnInit, OnDestroy, AfterViewInit{
     }
 
     ngOnInit() {
+
+        // register visualizer at posechat
+        this.posechatClientService.subReceiverState.subscribe((isReceiving) => {
+            if(isReceiving) {
+                this.receiverVisualizer.startDraw();
+            }else {
+                this.receiverVisualizer.stopDraw();
+            }
+        })
+
+        this.posechatClientService.subReceivedPose.subscribe( (pose) => {
+            //console.log("recevied pose: " + pose);
+            this.receiverVisualizer.poseInput = pose;
+        })
     }
 
     public ngAfterViewInit() {
