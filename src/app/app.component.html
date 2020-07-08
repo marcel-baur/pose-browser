@@ -1,0 +1,39 @@
+<mat-sidenav-container class="all-wrap">
+
+    <mat-sidenav-content class="page-wrap ...">
+
+        <!-- toolbar -->
+        <mat-toolbar>
+            <mat-toolbar-row>
+
+                <!-- icon -->
+                <span>
+          <a class="homelink" routerLink="" routerLinkActive="true">
+            ☉
+            Pose Recorder
+          </a>
+        </span>
+
+                <!-- this fills the remaining space of the current row -->
+                <span class="example-fill-remaining-space"></span>
+
+            </mat-toolbar-row>
+        </mat-toolbar>
+
+        <!-- content -->
+        <main class="content">
+            <app-pose></app-pose>
+        </main>
+
+        <!-- sticky footer -->
+        <footer>
+      <span class="footer">
+        <a class="footerlink" routerLink="" routerLinkActive="true">Home</a> |
+        <a class="footerlink" routerLink="impressum" routerLinkActive="true">Impressum</a> |
+        <a class="footerlink" routerLink="privacy" routerLinkActive="true">Datenschutz</a>
+      </span>
+        </footer>
+
+    </mat-sidenav-content>
+
+</mat-sidenav-container>

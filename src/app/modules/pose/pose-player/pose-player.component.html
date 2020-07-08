@@ -1,0 +1,32 @@
+<div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="10px" fxFlex="{{width}}">
+
+    <mat-card fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="10px">
+
+        <div fxLayout="row wrap" class="videoContainer">
+            <pose-visualizer #visualizer style="position:absolute;" [drawInterval]="10">
+            </pose-visualizer>
+        </div>
+
+        <!-- buttons -->
+        <div fxLayout="row wrap" fxLayoutGap="10px">
+
+            <div fxLayout="row wrap" fxLayoutGap="10px">
+                <button type="button" mat-raised-button (click)="fileInput.click()">Choose File</button>
+                <input hidden (change)="onFileSelected()" #fileInput type="file" id="file">
+
+                <button mat-raised-button fxFlex (click)="playing ? stopPlayback() : startPlayback()">
+                    {{playing ? 'Stop' : 'Play'}}
+                </button>
+            </div>
+        </div>
+
+        <!-- info -->
+        <div style="width:320px;">
+            <p class="mat-caption">
+                This is a test application for internal use.
+                The current version does not store or send any personal data on our server.
+                Data is only stored locally on your device.
+            </p>
+        </div>
+    </mat-card>
+</div>

@@ -1,0 +1,31 @@
+.videoContainer{
+    width: 320px;
+    height: 240px;
+    background-color: #ccd9cc;
+}
+.videoOverlay {
+    width: 320px;
+    height: 240px;
+    float:left;
+    position: absolute;
+    z-index:-1000;
+}
+
+.receiverContainer{
+     width: 320px;
+     height: 240px;
+     background-color: #ccd9cc;
+}
+video{
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
+}
+.canvas{
+  background-color: #6e6e6e;
+  width: 320px;
+  height: 240px;
+}
+
+.btnLabel {
+    font-size: 12px;
+}

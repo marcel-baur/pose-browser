@@ -1,0 +1,16 @@
+
+<!-- buttons -->
+<div fxLayout="column" fxLayoutGap="10px">
+
+    <div fxLayout="row wrap" fxLayoutGap="10px"  fxLayoutAlign="center center" fxFlexOffset="20px">
+        <button mat-button [routerLink]="['']">
+            Recorder
+        </button>
+
+        <button mat-button [routerLink]="['/player']">
+            Player
+        </button>
+    </div>
+
+    <router-outlet></router-outlet>
+</div>

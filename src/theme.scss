@@ -1,0 +1,20 @@
+// https://medium.com/@tomastrajan/the-complete-guide-to-angular-material-themes-4d165a9d24d1
+
+// define 3 theme color
+// mat-palette accepts $palette-name, main, lighter and darker variants
+$my-theme-primary: mat-palette($mat-indigo, 700, 300, 900);
+$my-theme-accent: mat-palette($mat-light-blue);
+$my-theme-warn: mat-palette($mat-deep-orange, A200);
+$text-color-dark: #333;
+$text-color: #666;
+$text-color-light: #aaa;
+$bg-color: #fafafa;
+$link-color: #1e88e5;
+
+// create theme (use mat-dark-theme for themes with dark backgrounds)
+//$my-theme: mat-dark-theme(
+$my-theme: mat-light-theme(
+    $my-theme-primary,
+    $my-theme-accent,
+    $my-theme-warn
+);
