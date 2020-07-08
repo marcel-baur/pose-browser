@@ -28,7 +28,7 @@ export class PoseRecorderComponent implements OnInit, OnDestroy, AfterViewInit{
 
     constructor(
         private mediaRecordingService: MediaRecordingService,
-        private posechatClientService: PosechatClientService) {
+        public posechatClientService: PosechatClientService) {
 
     }
 

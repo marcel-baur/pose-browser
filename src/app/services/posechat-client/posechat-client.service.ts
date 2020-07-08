@@ -5,7 +5,7 @@ import * as io from 'socket.io-client';
   providedIn: 'root'
 })
 export class PosechatClientService {
-    public url = 'http://localhost:3000';
+    public url = 'https://posechat-server.herokuapp.com/';
     private socket;
     public isConnected = false;
 
